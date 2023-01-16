@@ -1,7 +1,5 @@
 package com.pokemonreview.api.service;
 
-import java.util.List;
-
 import com.pokemonreview.api.dto.PokemonDto;
 import com.pokemonreview.api.dto.PokemonPageResponse;
 
