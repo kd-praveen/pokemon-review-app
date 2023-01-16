@@ -1,4 +1,4 @@
-package com.pokemonreview.api.config;
+package com.pokemonreview.api.security;
 
 import java.util.Collection;
 import java.util.List;

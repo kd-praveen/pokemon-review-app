@@ -2,7 +2,6 @@ package com.pokemonreview.api.controllers;
 
 import java.util.Collections;
 
-import org.springframework.boot.actuate.endpoint.SecurityContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -49,6 +48,8 @@ public class AuthController {
         Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword())
         );
+
+        System.out.println(authentication);
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
