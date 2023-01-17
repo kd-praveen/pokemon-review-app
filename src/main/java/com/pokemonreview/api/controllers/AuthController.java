@@ -14,12 +14,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.pokemonreview.api.dto.AuthResponseDto;
 import com.pokemonreview.api.dto.LoginDto;
 import com.pokemonreview.api.dto.RegisterDto;
 import com.pokemonreview.api.models.Role;
 import com.pokemonreview.api.models.UserEntity;
 import com.pokemonreview.api.repository.RoleRepository;
 import com.pokemonreview.api.repository.UserRepository;
+import com.pokemonreview.api.security.JWTGenerator;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -33,27 +35,34 @@ public class AuthController {
 
     private PasswordEncoder passwordEncoder;
 
-    public AuthController(AuthenticationManager authenticationManager, 
-                        UserRepository userRepository, 
-                        RoleRepository roleRepository, 
-                        PasswordEncoder passwordEncoder) {
+    private JWTGenerator jwtGenerator;
+
+    public AuthController(
+            AuthenticationManager authenticationManager,
+            UserRepository userRepository,
+            RoleRepository roleRepository,
+            PasswordEncoder passwordEncoder,
+            JWTGenerator jwtGenerator) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtGenerator = jwtGenerator;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginDto loginDto){
+    public ResponseEntity<AuthResponseDto> login(@RequestBody LoginDto loginDto){
         Authentication authentication = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword())
+            new UsernamePasswordAuthenticationToken(
+                loginDto.getUsername(), 
+                loginDto.getPassword())
         );
-
-        System.out.println(authentication);
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return new ResponseEntity<>("User signed in successfully", HttpStatus.OK);
+        String token = jwtGenerator.generateToken(authentication);
+
+        return new ResponseEntity<>(new AuthResponseDto(token), HttpStatus.OK);
     }
 
     @PostMapping("/register")

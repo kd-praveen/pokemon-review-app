@@ -2,8 +2,8 @@ package com.pokemonreview.api.security;
 
 import java.util.Date;
 
-import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties.Authentication;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
@@ -14,7 +14,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 public class JWTGenerator {
 
     public String generateToken(Authentication authentication){
-        String username = authentication.getUsername();
+        String username = authentication.getName();
         Date currentDate =  new Date();
         Date expirationDate = new Date(currentDate.getTime() + SecurityConstants.JWT_EXPIRATION);
 

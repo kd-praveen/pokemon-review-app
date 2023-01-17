@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class JwtAuthEntryPoint implements AuthenticationEntryPoint {
 
+    //AuthenticationEntryPoint class just returns HTTP code 401 (Unauthorized) when authentication fails, overriding default Spring’s redirecting.
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
             AuthenticationException authException) throws IOException, ServletException {
